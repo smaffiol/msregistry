@@ -28,7 +28,7 @@ from flask_bootstrap import Bootstrap
 from flask_mongoalchemy import MongoAlchemy
 from flask_environments import Environments
 from flask_mail import Mail, Message
-from flask import jsonify
+from flask import jsonify, request, current_app
 from flask import _app_ctx_stack as stack
 from flask_httpauth import HTTPBasicAuth
 
@@ -71,7 +71,7 @@ def create_app(config_name):
             abort(403)  # Forbidden
 
     # Simple username/password authentication.
-    @localauth.get_password
+    @httpbasicauth.get_password
     def get_pw(username):
         app = current_app._get_current_object()
         if username == app.config['AUTH_USER']:

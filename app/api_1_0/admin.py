@@ -22,23 +22,17 @@ __copyright__ = ("Copyright (c) 2018, 2019 S3IT, Zentrale Informatik,"
 
 
 from flask import jsonify, request
-# from flask import _app_ctx_stack as stack
-# from flask_httpauth import HTTPBasicAuth
 from flask import current_app
 
+from jsonschema import validate, ValidationError
+
 from . import api
-# from app.models.role import Role
 from app.models.survey import Survey
 
 from app import db
 from app import httpbasicauth
-# from app.auth.decorators import requires_auth, requires_roles, requires_consent
 from app.exceptions import SurveyNotFound, MethodNotAllowed
-
-from jsonschema import validate, ValidationError
-
-# from app import inputs
-# from app import utils
+from app import utils
 
 # Admin endpoints for Survey management
 
