@@ -22,41 +22,30 @@ __copyright__ = ("Copyright (c) 2018, 2019 S3IT, Zentrale Informatik,"
 
 
 from flask import jsonify, request
-from flask import _app_ctx_stack as stack
-from flask_httpauth import HTTPBasicAuth
+# from flask import _app_ctx_stack as stack
+# from flask_httpauth import HTTPBasicAuth
 from flask import current_app
 
 from . import api
-from app.models.role import Role
+# from app.models.role import Role
 from app.models.survey import Survey
 
 from app import db
-from app import localauth
-from app.auth.decorators import requires_auth, requires_roles, requires_consent
-
+from app import httpbasicauth
+# from app.auth.decorators import requires_auth, requires_roles, requires_consent
 from app.exceptions import SurveyNotFound, MethodNotAllowed
 
 from jsonschema import validate, ValidationError
 
-from app import inputs
-from app import utils
-
-
-# Simple username/password authentication.
-@localauth.get_password
-def get_pw(username):
-    app = current_app._get_current_object()
-    if username == app.config['AUTH_USER']:
-        return app.config['ACCESS_KEY']
-    return None
-
+# from app import inputs
+# from app import utils
 
 # Admin endpoints for Survey management
 
 ## GET operations
 
 @api.route('/admin/survey', methods=['GET'])
-@localauth.login_required
+@httpbasicauth.login_required
 def get_all_surveys():
     """
     Get all surveys for all users.
@@ -71,7 +60,7 @@ def get_all_surveys():
 
 
 @api.route('/admin/survey/user/<string:_uid>', methods=['GET'])
-@localauth.login_required
+@httpbasicauth.login_required
 def get_all_surveys_by_user(_uid):
     """
     Get all surveys for a given user
@@ -93,8 +82,7 @@ def get_all_surveys_by_user(_uid):
 ## POST operations
 
 @api.route('/admin/survey/<string:_id>', methods=['POST'])
-@localauth.login_required
-@requires_consent
+@httpbasicauth.login_required
 def update_user_survey_by_id(_id):
     """
     Update/replace existing survey by _id
@@ -115,7 +103,7 @@ def update_user_survey_by_id(_id):
 ## DELETE operations
 
 @api.route('/admin/survey/<string:_id>', methods=['DELETE'])
-@localauth.login_required
+@httpbasicauth.login_required
 def delete_survey_by_id(_id):
     """
     Update/replace existing survey by _id

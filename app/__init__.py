@@ -37,7 +37,7 @@ from app.exceptions import InvalidUsage
 bootstrap = Bootstrap()
 db = MongoAlchemy()
 mail = Mail()
-localauth = HTTPBasicAuth()
+httpbasicauth = HTTPBasicAuth()
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -63,6 +63,20 @@ def create_app(config_name):
         response = jsonify(error.to_dict())
         response.status_code = error.status_code
         return response
+
+    @app.before_request
+    def limit_remote_addr():
+        if request.remote_addr != app.config['AUTH_IP']:
+	    print "IP {0} not allowed!!".format(request.remote_addr)
+            abort(403)  # Forbidden
+
+    # Simple username/password authentication.
+    @localauth.get_password
+    def get_pw(username):
+        app = current_app._get_current_object()
+        if username == app.config['AUTH_USER']:
+            return app.config['ACCESS_KEY']
+        abort(401) # Unauthorized
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
