@@ -30,13 +30,14 @@ from flask_environments import Environments
 from flask_mail import Mail, Message
 from flask import jsonify
 from flask import _app_ctx_stack as stack
+from flask_httpauth import HTTPBasicAuth
 
 from app.exceptions import InvalidUsage
 
 bootstrap = Bootstrap()
 db = MongoAlchemy()
 mail = Mail()
-
+localauth = HTTPBasicAuth()
 
 def create_app(config_name):
     app = Flask(__name__)

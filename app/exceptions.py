@@ -148,6 +148,14 @@ class MethodNotAllowed(InvalidUsage):
                               message=message, 
                               payload={'code': 'method_not_allowed'})
 
+class NonUniqueSurveyIDError(InvalidUsage):
+    status_code = 406
+    
+    def __init__(self, message):
+        InvalidUsage.__init__(self, 
+                              message=message, 
+                              payload={'code': 'duplicate_survey_id'})
+
 class OAuthReturnsIncorrectPayload(InvalidUsage):
     status_code = 500
     

@@ -12,6 +12,11 @@ COMMON: &common
   REPORTS_DIR : '/tmp'
   OAUTH_CERTIFICATE_PATH: '/tmp/pubkey.pem'
 
+DATA_ADMIN: &data
+  AUTH_USER: 'datamgr'
+  ACCESS_KEY: '3v3n m0r3 s3cr3t'
+  AUTH_IP: 'some.ip.here'
+
 DEVELOPMENT: &development
   <<: *common
   DEBUG: True
