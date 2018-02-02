@@ -21,7 +21,7 @@ __copyright__ = ("Copyright (c) 2018, 2019 S3IT, Zentrale Informatik,"
 " University of Zurich")
 
 
-from flask import jsonify, request, abort
+from flask import jsonify, request
 from flask import _app_ctx_stack as stack
 from flask_httpauth import HTTPBasicAuth
 from flask import current_app
@@ -41,6 +41,8 @@ from jsonschema import validate, ValidationError
 from app import inputs
 from app import utils
 
+
+# Simple username/password authentication.
 @localauth.get_password
 def get_pw(username):
     app = current_app._get_current_object()
@@ -48,18 +50,10 @@ def get_pw(username):
         return app.config['ACCESS_KEY']
     return None
 
+
 # Admin endpoints for Survey management
 
 ## GET operations
-
-@api.route('/admin', methods=['GET'])
-@localauth.login_required
-def application():
-      app = current_app._get_current_object()
-      return jsonify({'code': 'authorization_success',
-                      'description': "All good. You only get this message if you're authenticated.",
-		      'autuser': dir(app)
-                    })
 
 @api.route('/admin/survey', methods=['GET'])
 @localauth.login_required
@@ -76,7 +70,6 @@ def get_all_surveys():
         raise MethodNotAllowed(error.message)
 
 
-# Get all surveys for a given user
 @api.route('/admin/survey/user/<string:_uid>', methods=['GET'])
 @localauth.login_required
 def get_all_surveys_by_user(_uid):
@@ -97,10 +90,11 @@ def get_all_surveys_by_user(_uid):
         raise MethodNotAllowed(error.message)
 
 
-## POST methods
+## POST operations
 
 @api.route('/admin/survey/<string:_id>', methods=['POST'])
 @localauth.login_required
+@requires_consent
 def update_user_survey_by_id(_id):
     """
     Update/replace existing survey by _id
@@ -118,23 +112,17 @@ def update_user_survey_by_id(_id):
     except db.BadValueException as error:
         raise MethodNotAllowed(error.message)
 
-## DELETE methods
+## DELETE operations
 
-# Delete survey by id
-@api.route('/admin/survey/<id>', methods=['DELETE'])
+@api.route('/admin/survey/<string:_id>', methods=['DELETE'])
 @localauth.login_required
 def delete_survey_by_id(_id):
     """
     Update/replace existing survey by _id
     """
     survey = Survey()
-    consent = request.get_json(silent=True, force=True)
-
     try:
-        return jsonify(success=bool(survey.deleteByUniqueID(_id,
-                                                            consent['survey'],
-                                                            consent['tags'],
-                                                            consent['ongoing'])))
+        return jsonify(success=bool(survey.deleteByUniqueID(_id)))
     except ValueError as error:
         raise MethodNotAllowed(error.message)
     except db.BadValueException as error:
