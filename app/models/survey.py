@@ -79,7 +79,7 @@ class Survey(db.Document):
         try:
             assert not user is None, "User not found"
         except AssertionError as ax:
-            raise UserNotFound(ax.message)
+            raise UserNotFound(uniqueID)
             
         query = db.session.query(Survey)
         

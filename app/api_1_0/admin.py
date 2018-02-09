@@ -72,7 +72,7 @@ def get_all_surveys_by_user(_uid):
     except db.BadValueException as error:
         raise MethodNotAllowed(error.message)
     except UserNotFound as error:
-        raise UserNotFound(error.message)
+        raise UserNotFound(_uid)
 
 ## POST operations
 
