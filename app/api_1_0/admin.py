@@ -71,7 +71,8 @@ def get_all_surveys_by_user(_uid):
         raise MethodNotAllowed(error.message)
     except db.BadValueException as error:
         raise MethodNotAllowed(error.message)
-
+    except UserNotFoundError as error:
+        raise UserNotFoundError(error.message)
 
 ## POST operations
 
@@ -100,7 +101,7 @@ def update_user_survey_by_id(_id):
 @httpbasicauth.login_required
 def delete_survey_by_id(_id):
     """
-    Update/replace existing survey by _id
+    Delete existing survey by _id
     """
     survey = Survey()
     try:

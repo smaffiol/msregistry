@@ -73,9 +73,16 @@ class Survey(db.Document):
         one could further filter the scope of the query
         """
 
+        # Check if user exists
+        user = User().query.filter(User.uniqueID == uniqueID).first()
+        try:
+            assert not user is None, "User not found"
+        except AssertionError as ax:
+            raise UserNotFoundError(ax.message)
+            
         query = db.session.query(Survey)
         
-        query.filter(Survey.user == User().query.filter(User.uniqueID == uniqueID).first().mongo_id)
+        query.filter(Survey.user == user.mongo_id)
         
         if from_datetime is not None:
             query.filter(Survey.timestamp >= from_datetime)
