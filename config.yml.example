@@ -12,11 +12,6 @@ COMMON: &common
   REPORTS_DIR : '/tmp'
   OAUTH_CERTIFICATE_PATH: '/tmp/pubkey.pem'
 
-DATA_ADMIN: &data
-  AUTH_USER: 'your-mgr-user'
-  ACCESS_KEY: '3v3n m0r3 s3cr3t'
-  AUTH_IP: 'some.ip.here'
-
 DEVELOPMENT: &development
   <<: *common
   DEBUG: True
@@ -27,8 +22,24 @@ PRODUCTION: &production
   MONGOALCHEMY_DATABASE: 'msregistry'
 
 TESTING: &testing
+  <<: *common
   TESTING: True
+  DEGUG: True
   MONGOALCHEMY_DATABASE: 'msdevelopment'
+  SSL_DISABLE: TRUE
+  DEBUG: True
+  AUTH_USER: 'testme'
+  ACCESS_KEY: 'letmein'
+  AUTH_IP: '127.0.0.1'
+
+DATA: &data
+  <<: *common
+  MONGOALCHEMY_DATABASE: 'msregistry'
+  SSL_DISABLE: TRUE
+  DEBUG: True
+  AUTH_USER: 'auth-user-name'
+  ACCESS_KEY: 'your password'
+  AUTH_IP: 'some.ip.here'
 
 DEFAULT: &default
-  <<: *development
+  <<: *testing

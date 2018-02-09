@@ -68,7 +68,7 @@ def create_app(config_name):
     def limit_remote_addr():
         if request.remote_addr != app.config['AUTH_IP']:
 	    print "IP {0} not allowed!!".format(request.remote_addr)
-            abort(403)  # Forbidden
+        raise InvalidAuthentication()
 
     # Simple username/password authentication.
     @httpbasicauth.get_password
