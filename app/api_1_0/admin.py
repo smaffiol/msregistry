@@ -31,7 +31,7 @@ from app.models.survey import Survey
 
 from app import db
 from app import httpbasicauth
-from app.exceptions import SurveyNotFound, MethodNotAllowed, UserNotFoundError
+from app.exceptions import SurveyNotFound, MethodNotAllowed, UserNotFound
 from app import utils
 
 # Admin endpoints for Survey management
@@ -71,8 +71,8 @@ def get_all_surveys_by_user(_uid):
         raise MethodNotAllowed(error.message)
     except db.BadValueException as error:
         raise MethodNotAllowed(error.message)
-    except UserNotFoundError as error:
-        raise UserNotFoundError(error.message)
+    except UserNotFound as error:
+        raise UserNotFound(error.message)
 
 ## POST operations
 

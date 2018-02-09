@@ -26,6 +26,7 @@ from flask import current_app
 from datetime import datetime
 
 from app import db
+from app.exceptions import SurveyNotFound, MethodNotAllowed, UserNotFound
 
 from user import User
 
@@ -78,7 +79,7 @@ class Survey(db.Document):
         try:
             assert not user is None, "User not found"
         except AssertionError as ax:
-            raise UserNotFoundError(ax.message)
+            raise UserNotFound(ax.message)
             
         query = db.session.query(Survey)
         
