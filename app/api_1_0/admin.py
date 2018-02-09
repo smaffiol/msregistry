@@ -31,7 +31,7 @@ from app.models.survey import Survey
 
 from app import db
 from app import httpbasicauth
-from app.exceptions import SurveyNotFound, MethodNotAllowed
+from app.exceptions import SurveyNotFound, MethodNotAllowed, UserNotFoundError
 from app import utils
 
 # Admin endpoints for Survey management
