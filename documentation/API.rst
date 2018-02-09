@@ -6,14 +6,15 @@ Document Version
 ----------------
 
 :Date:
-    2016-06-18
+    2018-02-09
 :Version:
-    v0.5.1
+    v0.6.0
 :Authors:
     Filippo Panessa <filippo.panessa@gmail.com>
     Antonio Messina <antonio.messina@uzh.ch>
+    Sergio Maffioletti <sergio.maffioletti@uzh.ch>
 :Copyright:
-    Copyright (c) 2016 S3IT, Zentrale Informatik, University of Zurich
+    Copyright (c) 2018 2019 S3IT, Zentrale Informatik, University of Zurich
 
 Welcome to the MS Registry REST API. Below, you’ll find a full listing of all 
 the available  endpoints. As we add more endpoints, they will be automatically 
@@ -24,7 +25,7 @@ will accept, what the JSON object’s parameters will be in the response, and an
 example query/response.
 
 This documentation is for most recent version of the MS Registry REST API, 
-version **v0.5.1**.
+version **v0.6.0**.
 
 GET /auth/test
 --------------
@@ -1386,7 +1387,7 @@ Response
       "success": true
     }
 
-GET /admin//survey
+GET /admin/survey
 --------------
 
 Get all surveys for all users.
@@ -1409,7 +1410,7 @@ These are the possible errors returned by this endpoint.
 +---------------+----------------------+---------------------------------------+
 | **status**    | **code**             | **message**                           |
 +===============+======================+=======================================+
-| 403           |authorization_required| Authorization header is expected      |
+| 401           |authorization_error   | Authorization error                   |
 +---------------+----------------------+---------------------------------------+
 
 Example
@@ -1471,11 +1472,15 @@ Resource Errors
 
 These are the possible errors returned by this endpoint.
 
-+---------------+----------------------+---------------------------------------+
-| **status**    | **code**             | **message**                           |
-+===============+======================+=======================================+
-| 403           |authorization_required| Authorization header is expected      |
-+---------------+----------------------+---------------------------------------+
++---------------+----------------------+------------------------------------------+
+| **status**    | **code**             | **message**                              |
++===============+======================+==========================================+
+| 401           | authorization_error  | Authorization error                      |
++---------------+----------------------+------------------------------------------+
+| 404           | not_found            | Couldn't found a User with UniqueID=<id> |
++---------------+----------------------+------------------------------------------+
+| 405           | method_not_allowed   |                                          |
++---------------+----------------------+------------------------------------------+
 
 Example
 ```````
@@ -1539,7 +1544,11 @@ These are the possible errors returned by this endpoint.
 +---------------+----------------------+---------------------------------------+
 | **status**    | **code**             | **message**                           |
 +===============+======================+=======================================+
-| 403           |authorization_required| Authorization header is expected      |
+| 401           | authorization_error  | Authorization error                   |
++---------------+----------------------+---------------------------------------+
+| 404           | not_found            | Couldn't found a Survey with id=<id>  |
++---------------+----------------------+---------------------------------------+
+| 405           | method_not_allowed   |                                       |
 +---------------+----------------------+---------------------------------------+
 
 Example
@@ -1587,8 +1596,13 @@ These are the possible errors returned by this endpoint.
 +---------------+----------------------+---------------------------------------+
 | **status**    | **code**             | **message**                           |
 +===============+======================+=======================================+
-| 403           |authorization_required| Authorization header is expected      |
+| 401           | authorization_error  | Authorization error                   |
 +---------------+----------------------+---------------------------------------+
+| 404           | not_found            | Couldn't found a Survey with id=<id>  |
++---------------+----------------------+---------------------------------------+
+| 405           | method_not_allowed   |                                       |
++---------------+----------------------+---------------------------------------+
+
 
 Example
 ```````

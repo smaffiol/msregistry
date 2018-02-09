@@ -36,6 +36,14 @@ class InvalidUsage(Exception):
         rv['message'] = self.message
         return rv
 
+class InvalidAuthentication(InvalidUsage):
+    status_code = 401
+
+    def __init__(self):
+        InvalidUsage.__init__(self, 
+                              message='Authentication error', 
+                              payload={'code': 'authentication_error'})
+    
 class TokenIsExpired(InvalidUsage):
     status_code = 400
     

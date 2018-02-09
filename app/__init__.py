@@ -23,7 +23,7 @@ __copyright__ = ("Copyright (c) 2016 S3IT, Zentrale Informatik,"
 
 from Crypto.PublicKey import RSA
 
-from flask import Flask
+from flask import Flask, abort
 from flask_bootstrap import Bootstrap
 from flask_mongoalchemy import MongoAlchemy
 from flask_environments import Environments
@@ -32,7 +32,7 @@ from flask import jsonify, request, current_app
 from flask import _app_ctx_stack as stack
 from flask_httpauth import HTTPBasicAuth
 
-from app.exceptions import InvalidUsage
+from app.exceptions import InvalidUsage, InvalidAuthentication
 
 bootstrap = Bootstrap()
 db = MongoAlchemy()
@@ -76,7 +76,7 @@ def create_app(config_name):
         app = current_app._get_current_object()
         if username == app.config['AUTH_USER']:
             return app.config['ACCESS_KEY']
-        abort(401) # Unauthorized
+        raise InvalidAuthentication()
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

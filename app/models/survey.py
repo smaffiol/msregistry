@@ -128,29 +128,37 @@ class Survey(db.Document):
         """
 
         try:
-            assert Survey.query.filter(Survey.mongo_id == _id).count() == 1
-            existing_survey_object = Survey.query.filter(Survey.mongo_id == _id).first()
-        except AssertionError as ax:
-            raise NonUniqueSurveyIDError(ax.message)
+            surveys = Survey.query.filter(Survey.mongo_id == _id)
+            if surveys.count() == 0:
+                raise SurveyNotFound(_id)
+            if surveys.count() > 1:
+                raise NonUniqueSurveyIDError(_id)
+        except db.BadValueException as error:
+            raise SurveyNotFound(_id)
 
+        existing_survey_object = surveys.first()
         existing_survey_object.survey = survey
         existing_survey_object.tags = tags
         existing_survey_object.ongoing = ongoing
         existing_survey_object.timestamp=datetime.utcnow()
         existing_survey_object.save()
         return True
-
+        
     def deleteByUniqueID(self, _id):
         """
         Verify survey exists.
         Then delete it.
         """
         try:
-            assert Survey.query.filter(Survey.mongo_id == _id).count() == 1
-            existing_survey_object = Survey.query.filter(Survey.mongo_id == _id).first()
-        except AssertionError as ax:
-            raise NonUniqueSurveyIDError(ax.message)
+            surveys = Survey.query.filter(Survey.mongo_id == _id)
+            if surveys.count() == 0:
+                raise SurveyNotFound(_id)
+            if surveys.count() > 1:
+                raise NonUniqueSurveyIDError(_id)
+        except db.BadValueException as error:
+            raise SurveyNotFound(_id)
 
+        existing_survey_object = surveys.first()
         existing_survey_object.remove()
         return True
 

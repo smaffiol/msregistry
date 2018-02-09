@@ -94,6 +94,8 @@ def update_user_survey_by_id(_id):
         raise MethodNotAllowed(error.message)
     except db.BadValueException as error:
         raise MethodNotAllowed(error.message)
+    except SurveyNotFound as error:
+        raise SurveyNotFound(_id)
 
 ## DELETE operations
 
@@ -110,3 +112,5 @@ def delete_survey_by_id(_id):
         raise MethodNotAllowed(error.message)
     except db.BadValueException as error:
         raise MethodNotAllowed(error.message)
+    except SurveyNotFound as error:
+        raise SurveyNotFound(_id)
