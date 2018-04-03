@@ -66,15 +66,15 @@ def create_app(config_name):
 
     @app.before_request
     def limit_remote_addr():
-        if request.remote_addr != app.config['AUTH_IP']:
+        if not request.remote_addr in app.config['AUTH_IP']:
 	    print "IP {0} not allowed!!".format(request.remote_addr)
-        raise InvalidAuthentication()
+            raise InvalidAuthentication()
 
     # Simple username/password authentication.
     @httpbasicauth.get_password
     def get_pw(username):
-        app = current_app._get_current_object()
-        if username == app.config['AUTH_USER']:
+        #app = current_app._get_current_object()
+	if username == app.config['AUTH_USER']:
             return app.config['ACCESS_KEY']
         raise InvalidAuthentication()
 
